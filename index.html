@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thiệp Mời Lễ Tốt Nghiệp - Phùng Quốc Tân | Trường Đại Học Quốc Tế - ĐHQG TP.HCM</title>
+
+  <!-- Favicon từ tài nguyên IU -->
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+  <link rel="apple-touch-icon" href="assets/favicon-180.png">
+
+  <!-- CẤU HÌNH HIỂN THỊ KHI GỬI LINK QUA ZALO / FACEBOOK / MESSENGER -->
+ 
+  <meta property="og:title" content="Thiệp Mời Lễ Tốt Nghiệp - Phùng Quốc Tân (29.11.2026)" />
+  <meta property="og:image" content="https://qtan2209.github.io/graduation-2026/assets/ITITIU21102_ITITIU21102.JPG" />
+  <meta property="og:description" content="Trân trọng kính mời bạn tới chung vui và chụp ảnh kỷ niệm tại Hội trường Trần Chí Đạo (ĐHQG-HCM) vào chiều Chủ Nhật, 29/11/2026!" />
+  <meta property="og:type" content="website" />
+
+  <!-- Tailwind CSS & Bộ Font Luxury Academic (Fraunces + Be Vietnam Pro) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400&family=Pinyon+Script&display=swap">
+  
+  <style>
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background-color: #0F1D30;
+    }
+    .font-serif-display { font-family: 'Fraunces', serif; }
+    .font-script { font-family: 'Pinyon Script', cursive; }
+
+    /* Canvas Pháo hoa phủ toàn màn hình không cản click */
+    #fx {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 45;
+    }
+
+    /* Hiệu ứng 1 ảnh chính trồi lên từ phong bì */
+    @keyframes slideUpMainPhoto {
+      0% { transform: translate(-50%, 65px) scale(0.95); opacity: 0; }
+      100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+    }
+    @keyframes slideUpTicket {
+      0% { transform: translate(-50%, 45px); opacity: 0; }
+      100% { transform: translate(-50%, 0); opacity: 1; }
+    }
+    .anim-main-photo { animation: slideUpMainPhoto 0.95s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    .anim-ticket     { animation: slideUpTicket 0.9s 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards; opacity: 0; }
+
+    /* Hiệu ứng Xuất hiện mượt khi cuộn trang (.reveal) */
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: all 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Hiệu ứng Ngôi sao lấp lánh (.spark) & Dải phân cách hoàng gia (.orn) */
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(0.85); }
+      50% { opacity: 1; transform: scale(1.25); }
+    }
+    .spark {
+      display: inline-block;
+      color: #C59B27;
+      animation: twinkle 2.2s infinite ease-in-out;
+    }
+    .orn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 14px auto;
+    }
+    .orn i {
+      display: block;
+      width: 48px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #C59B27, transparent);
+    }
+    .orn span {
+      color: #C59B27;
+      font-size: 12px;
+    }
+
+    /* Hiệu ứng xoay đĩa nhạc */
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .spin-music { animation: spinSlow 6s linear infinite; }
+  </style>
+</head>
+<body class="text-slate-800 antialiased">
+
+  <!-- Canvas Pháo Hoa -->
+  <canvas id="fx" aria-hidden="true"></canvas>
+
+  <!-- Nút Nhạc Nền Cố Định Góc Dưới Phải -->
+  <button id="music-btn" onclick="toggleMusic()" title="Bật/Tắt nhạc"
+          class="fixed bottom-5 right-5 z-50 w-11 h-11 rounded-full bg-[#1E3A5F] text-white shadow-lg border-2 border-[#C59B27] flex items-center justify-center text-lg">
+    🎵
+  </button>
+  <audio id="bg-music" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Khung Mobile-First căn giữa màn hình -->
+  <main class="max-w-[460px] mx-auto min-h-screen bg-[#FAF7F2] shadow-2xl overflow-hidden relative">
+
+    <!-- ================= GÓC LOGO & TÊN TRƯỜNG (SONG NGỮ CHUẨN THEO THƯ MỜI) ================= -->
+    <div class="px-4 py-3.5 bg-white/95 backdrop-blur-sm border-b border-slate-200/70 flex items-center justify-between gap-2 relative z-20">
+      <div class="flex items-center gap-2.5">
+        <img src="assets/iu-logo-hd.webp" alt="International University logo" 
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+             class="w-10 h-10 object-contain shrink-0" />
+        <div style="display:none;" class="w-10 h-10 rounded-full bg-[#1E3A5F] text-white font-serif-display font-bold text-xs items-center justify-center border border-[#C59B27] shrink-0">
+          IU
+        </div>
+        <div class="leading-snug text-left">
+          <span class="block text-[9.5px] uppercase tracking-tight text-slate-600 font-medium">
+            ĐẠI HỌC QUỐC GIA TP.HCM - <strong class="text-[#1E3A5F] font-bold">TRƯỜNG ĐẠI HỌC QUỐC TẾ</strong>
+          </span>
+          <span class="block text-[8.5px] uppercase tracking-tight text-slate-400">
+            VIET NAM NATIONAL UNIVERSITY HCMC - <strong class="text-slate-600 font-semibold">INTERNATIONAL UNIVERSITY</strong>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 1. HERO & PHONG BÌ (1 ẢNH CHÍNH CĂN GIỮA) ================= -->
+    <section class="pt-7 pb-6 px-4 text-center relative overflow-hidden">
+      <div class="absolute inset-0 pointer-events-none opacity-15" aria-hidden="true">
+        <picture>
+          <source media="(max-width:700px) and (orientation:portrait)" srcset="assets/hero-recap-p.jpg">
+          <source media="(max-width:700px)" srcset="assets/hero-recap-m.jpg">
+          <img src="assets/hero-recap.jpg" alt="" class="w-full h-full object-cover" onerror="this.style.display='none'">
+        </picture>
+      </div>
+
+      <div class="relative z-10">
+        <p class="text-xs uppercase tracking-[0.25em] text-[#1E3A5F] font-semibold mb-1">
+          <span class="spark" aria-hidden="true">✦</span> Graduation Ceremony <span class="spark" aria-hidden="true">✦</span>
+        </p>
+        <h1 class="font-serif-display text-4xl font-semibold text-[#1E3A5F]">Phùng Quốc Tân</h1>
+        <p class="font-serif-display italic text-lg text-[#C59B27] mt-0.5">Congratulations — Class of 2026</p>
+        <p class="text-xs text-slate-500 mt-1.5">Khoa Công nghệ Thông tin • Trường Đại Học Quốc tế - ĐHQG TP.HCM</p>
+        <p class="text-[11px] text-slate-400 mt-0.5">School of Computer Science and Engineering • International University - VNUHCM</p>
+
+        <!-- Khung xếp lớp Phong bì với 1 ẢNH CHÍNH DUY NHẤT -->
+        <div class="relative w-[340px] h-[415px] mx-auto mt-6">
+          <!-- Mặt sau phong bì -->
+          <div class="absolute bottom-0 left-0 w-full h-[225px] bg-[#162C46] rounded-b-xl shadow-inner z-10"></div>
+
+          <!-- 1 Ảnh chính duy nhất trồi lên giữa phong bì -->
+          <div class="anim-main-photo absolute top-1 left-1/2 w-60 p-2.5 pb-8 bg-white shadow-xl border border-slate-100 z-20">
+            <img src="assets/ITITIU21102_ITITIU21102.JPG" 
+                 alt="Ảnh kỷ yếu tốt nghiệp" class="w-full h-64 object-cover" />
+            <p class="font-script text-xl text-slate-600 mt-1">Class of 2026</p>
+          </div>
+
+          <!-- Vé mời VIP -->
+          <div class="anim-ticket absolute bottom-20 left-1/2 w-64 bg-[#FFFDF9] border-2 border-dashed border-[#C59B27] p-2.5 rounded-lg shadow-md z-30">
+            <span class="text-[10px] uppercase tracking-widest text-[#C59B27] font-bold">Save The Date</span>
+            <p class="font-serif-display text-xl font-semibold text-[#1E3A5F]">29 . 11 . 2026</p>
+            <p class="text-[11px] font-medium text-slate-600">Hội trường Trần Chí Đạo • ĐHQG-HCM</p>
+          </div>
+
+          <!-- Mặt trước phong bì -->
+          <div class="absolute bottom-0 left-0 w-full h-[200px] bg-[#1E3A5F] rounded-b-xl z-40 shadow-xl"
+               style="clip-path: polygon(0 0, 50% 38%, 100% 0, 100% 100%, 0 100%);">
+          </div>
+
+          <!-- Con dấu sáp -->
+          <div class="absolute bottom-[108px] left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-[#C59B27] border-4 border-[#DFB848] shadow-lg z-50 flex items-center justify-center text-white text-lg">
+            🎓
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 2. LỜI MỜI CHUNG CHO MỌI NGƯỜI ================= -->
+    <section class="px-6 py-6 text-center reveal">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200/70 shadow-sm">
+        <p class="font-script text-3xl text-[#C59B27] mb-1">Trân trọng kính mời</p>
+        <h2 class="font-serif-display text-2xl font-semibold text-[#1E3A5F] mb-2">
+          Cả Nhà Thân Yêu
+        </h2>
+        <div class="orn" aria-hidden="true"><i></i><span>✦</span><i></i></div>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          Hành trình đại học đầy ắp kỷ niệm tại Trường Đại Học Quốc tế - ĐHQG TP.HCM của mình đã chính thức đánh dấu một bước tiến mới. Mình rất mong được đón tiếp mọi người tới gặp mặt, chụp cùng nhau những tấm hình kỷ niệm và chia sẻ niềm vui cùng mình nhé.
+        </p>
+      </div>
+    </section>
+
+    <!-- ================= 3. LỊCH THÁNG TỐT NGHIỆP ================= -->
+    <section class="px-6 py-4 reveal">
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
+        <h3 class="font-serif-display text-2xl font-semibold text-[#1E3A5F] mb-1">Tháng 11 - 2026</h3>
+        <p class="text-xs text-slate-400 mb-4">Chủ Nhật, ngày 29 tháng 11 năm 2026</p>
+        
+        <div class="grid grid-cols-7 gap-y-3 text-xs font-semibold text-slate-400 mb-2">
+          <div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div>
+        </div>
+        <div id="calendar-grid" class="grid grid-cols-7 gap-y-2 text-sm text-slate-700"></div>
+      </div>
+    </section>
+
+    <!-- ================= 4. LỊCH TRÌNH & ĐỊA ĐIỂM CHI TIẾT ================= -->
+    <section class="px-6 py-6 reveal">
+      <h3 class="font-serif-display text-2xl font-semibold text-center text-[#1E3A5F] mb-1">Thời Gian Và Địa Điểm</h3>
+      <p class="text-xs text-center text-slate-500 mb-5">Bạn có thể sắp xếp ghé gặp mình ở 1 trong 2 khung giờ bên ngoài hội trường nhé!</p>
+      
+      <!-- Thẻ Địa Điểm Chi Tiết (Việt - Anh chuẩn theo thiệp mời) -->
+      <div class="bg-white p-5 rounded-2xl border border-[#C59B27]/40 shadow-sm mb-5 text-center">
+        <span class="inline-block text-[10px] font-bold uppercase tracking-widest text-[#C59B27] bg-amber-50 px-2.5 py-0.5 rounded-full mb-2">
+          Địa điểm tổ chức • Venue
+        </span>
+        <h4 class="font-serif-display text-xl font-semibold text-[#1E3A5F]">Hội trường Trần Chí Đạo</h4>
+        <p class="text-xs font-medium text-slate-700 mt-1">Đại Học Quốc Gia Thành phố Hồ Chí Minh (ĐHQG-HCM)</p>
+        <p class="text-xs text-slate-500 mt-0.5">Đường Võ Trường Toản, Khu phố 9, Phường Linh Xuân, TP.HCM</p>
+        
+        <div class="border-t border-slate-100 my-3"></div>
+        
+        <p class="text-[11px] font-medium text-slate-600 italic">Tran Chi Dao Auditorium — Viet Nam National University Ho Chi Minh City (VNUHCM)</p>
+        <p class="text-[11px] text-slate-400">Vo Truong Toan Street, Quarter 9, Linh Xuan Ward, Ho Chi Minh City</p>
+      </div>
+
+      <!-- Các mốc thời gian -->
+      <div class="space-y-3.5">
+        <!-- Khung giờ gặp mặt 1 -->
+        <div class="bg-white p-4 rounded-xl border-l-4 border-[#C59B27] shadow-sm">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-xs font-bold uppercase tracking-wider text-[#C59B27]">11:00 – 13:00</span>
+            <span class="text-xs bg-amber-100 text-amber-800 font-medium px-2.5 py-0.5 rounded-full">Gặp mặt sớm</span>
+          </div>
+          <h4 class="font-serif-display text-lg font-semibold text-[#1E3A5F]">Tiếp Đón Trước Lễ</h4>
+          <p class="text-xs text-slate-500 mt-0.5">Khu vực Sân & Sảnh trước Hội trường Trần Chí Đạo</p>
+        </div>
+
+        <!-- Nghi thức chính thức -->
+        <div class="bg-slate-100/90 p-4 rounded-xl border-l-4 border-[#1E3A5F]">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-xs font-bold uppercase tracking-wider text-[#1E3A5F]">13:00 – 16:45</span>
+            <span class="text-xs bg-blue-100 text-[#1E3A5F] font-medium px-2.5 py-0.5 rounded-full">Trong Hội trường</span>
+          </div>
+          <h4 class="font-serif-display text-lg font-semibold text-[#1E3A5F]">Lễ Tốt Nghiệp Và Trao Bằng</h4>
+          <p class="text-xs text-slate-500 mt-0.5">Lễ trao bằng diễn ra từ 13:30 – 16:30 bên trong Hội trường</p>
+        </div>
+
+        <!-- Khung giờ gặp mặt 2 -->
+        <div class="bg-white p-4 rounded-xl border-l-4 border-[#C59B27] shadow-sm">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-xs font-bold uppercase tracking-wider text-[#C59B27]">16:30 – 18:00</span>
+            <span class="text-xs bg-amber-100 text-amber-800 font-medium px-2.5 py-0.5 rounded-full">Tiếp đón sau lễ</span>
+          </div>
+          <h4 class="font-serif-display text-lg font-semibold text-[#1E3A5F]">Chung Vui</h4>
+          <p class="text-xs text-slate-500 mt-0.5">Khu vực Sân & Sảnh chính sau khi kết thúc buổi lễ</p>
+        </div>
+      </div>
+
+      <!-- Nút dẫn đường Google Maps, Gọi điện & Facebook -->
+      <div class="mt-5 space-y-2.5">
+        <a href="https://maps.app.goo.gl/qAXxFsJnys7sM2L17" target="_blank" 
+           class="block w-full bg-[#1E3A5F] text-white text-sm font-medium py-3 rounded-xl text-center shadow hover:bg-[#152943] transition">
+          📍 Chỉ Đường Google Maps
+        </a>
+        
+        <div class="grid grid-cols-2 gap-2.5">
+          <a href="tel:0399 149 442" 
+             class="bg-white border border-[#1E3A5F] text-[#1E3A5F] text-xs font-medium py-2.5 px-2 rounded-xl text-center hover:bg-slate-50 transition flex items-center justify-center gap-1">
+            📞 SĐT/Zalo 0399149442
+          </a>
+          <a href="https://www.facebook.com/tan.quoc.5811877" target="_blank" 
+             class="bg-[#1877F2] text-white text-xs font-medium py-2.5 px-2 rounded-xl text-center shadow-sm hover:bg-[#166fe5] transition flex items-center justify-center gap-1.5">
+            <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Facebook Quốc Tân
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 5. XÁC NHẬN THAM DỰ & LƯU BÚT ================= -->
+    <section class="px-6 py-6 reveal">
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80">
+        <h3 class="font-serif-display text-2xl font-semibold text-center text-[#1E3A5F] mb-1">Bật Mí Tham Dự</h3>
+        <p class="text-xs text-center text-slate-500 mb-5">Chọn khung giờ bạn đến để mình tiện chuẩn bị nhé!</p>
+
+        <form id="rsvp-form" class="space-y-3.5">
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Tên của bạn</label>
+            <input type="text" name="Ten_Khach" required placeholder="Nhập tên của bạn..." 
+                   class="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-[#1E3A5F]" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Khung giờ bạn dự kiến có mặt (Chiều 29/11)</label>
+            <select name="Khung_Gio" class="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-[#1E3A5F] bg-white">
+              <option value="11:00 – 13:00 (Trước buổi lễ)">11:00 – 13:00 (Gặp mặt & chụp ảnh trước buổi lễ)</option>
+              <option value="16:30 – 18:00 (Sau buổi lễ)">16:30 – 18:00 (Gặp mặt & chụp ảnh sau buổi lễ)</option>
+              <option value="Cả 2 khung giờ">Cả 2 khung giờ trên luôn!</option>
+              <option value="Gửi lời chúc từ xa">Mình bận mất rồi, gửi lời chúc từ xa nhé!</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Lưu bút / Lời chúc tốt nghiệp</label>
+            <textarea name="Loi_Chuc" rows="3" placeholder="Viết vài dòng chúc mừng cho tân cử nhân..." 
+                      class="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-[#1E3A5F]"></textarea>
+          </div>
+
+          <button type="submit" id="rsvp-submit-btn"
+                  class="w-full bg-[#C59B27] text-white font-semibold text-sm py-3 rounded-xl shadow hover:bg-[#b0891f] transition">
+            Gửi Tín Hiệu & Lời Chúc
+          </button>
+        </form>
+        <p id="rsvp-success" class="hidden text-center text-sm text-emerald-700 font-medium mt-3 bg-emerald-50 p-3 rounded-xl">
+          🎉 Cảm ơn bạn! Mình đã nhận được thông tin và hẹn gặp bạn tại Hội trường Trần Chí Đạo chiều 29/11 nhé!
+        </p>
+      </div>
+    </section>
+
+    <!-- ================= 6. ĐẾM NGƯỢC ================= -->
+    <section class="px-6 py-6 text-center reveal">
+      <p class="text-xs uppercase tracking-widest text-slate-400 mb-3">Đếm Ngược Tới 11:00 • 29.11.2026</p>
+      <div class="grid grid-cols-4 gap-2 max-w-[300px] mx-auto">
+        <div class="bg-[#1E3A5F] text-white py-2.5 rounded-xl shadow-sm">
+          <span id="days" class="block text-xl font-bold">00</span>
+          <span class="text-[10px] opacity-80">Ngày</span>
+        </div>
+        <div class="bg-[#1E3A5F] text-white py-2.5 rounded-xl shadow-sm">
+          <span id="hours" class="block text-xl font-bold">00</span>
+          <span class="text-[10px] opacity-80">Giờ</span>
+        </div>
+        <div class="bg-[#1E3A5F] text-white py-2.5 rounded-xl shadow-sm">
+          <span id="minutes" class="block text-xl font-bold">00</span>
+          <span class="text-[10px] opacity-80">Phút</span>
+        </div>
+        <div class="bg-[#1E3A5F] text-white py-2.5 rounded-xl shadow-sm">
+          <span id="seconds" class="block text-xl font-bold">00</span>
+          <span class="text-[10px] opacity-80">Giây</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 7. DẢI CẢM ƠN TRẮNG ĐEN ================= -->
+    <section class="relative bg-[#13294B] text-white py-12 px-6 text-center mt-4 reveal">
+      <img src="assets/band-closing-bw.jpg" 
+           onerror="this.src='https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80'"
+           alt="" class="absolute inset-0 w-full h-full object-cover opacity-20 grayscale" />
+      
+      <div class="relative z-10">
+        <p class="text-[11px] uppercase tracking-[0.2em] text-amber-300">
+          <span class="spark" aria-hidden="true">✦</span> Graduation Ceremony 2026 <span class="spark" aria-hidden="true">✦</span>
+        </p>
+        <h2 class="font-serif-display text-3xl mt-2">
+          <span class="italic font-normal text-amber-200">Cảm ơn</span> <strong class="font-medium">đã đồng hành cùng Tân</strong>
+        </h2>
+        <div class="orn" aria-hidden="true"><i></i><span>✦</span><i></i></div>
+        <p class="text-xs text-slate-300 leading-relaxed max-w-xs mx-auto">
+          Mong rằng tri thức cùng những năm tháng thanh xuân rực rỡ này sẽ mãi là hành trang đẹp nhất trên chặng đường phía trước.
+        </p>
+        <p class="font-serif-display italic text-sm text-amber-200/90 mt-5">
+          "Dù mai này ở bất cứ nơi đâu. Chúc tất cả chúng ta cùng thành công"
+        </p>
+      </div>
+    </section>
+
+    <footer class="bg-[#0B192C] text-slate-400 text-[11px] text-center py-4">
+      © 2026 Trường Đại Học Quốc tế — ĐHQG TP.HCM (International University — VNUHCM)
+    </footer>
+
+  </main>
+
+  <script>
+    // 1. Render lịch tháng 11/2026 (Ngày 1 rơi vào Chủ nhật -> 6 ô trống đầu)
+    const calendarGrid = document.getElementById('calendar-grid');
+    const targetDay = 29;
+    for (let i = 0; i < 6; i++) calendarGrid.innerHTML += `<div></div>`;
+    for (let day = 1; day <= 30; day++) {
+      calendarGrid.innerHTML += day === targetDay
+        ? `<div class="flex items-center justify-center"><span class="w-8 h-8 rounded-full bg-[#C59B27] text-white font-bold flex items-center justify-center shadow-md scale-110">${day}</span></div>`
+        : `<div class="h-8 flex items-center justify-center">${day}</div>`;
+    }
+
+    // 2. Đồng hồ đếm ngược tới 11:00 ngày 29/11/2026
+    const targetDate = new Date("2026-11-29T11:00:00").getTime();
+    setInterval(() => {
+      const distance = targetDate - new Date().getTime();
+      if (distance > 0) {
+        document.getElementById("days").innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+        document.getElementById("hours").innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+        document.getElementById("minutes").innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+        document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+      }
+    }, 1000);
+
+    // 3. Hiệu ứng Xuất hiện mượt khi cuộn trang (.reveal)
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('is-visible');
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // 4. Hiệu ứng Pháo hoa ăn mừng (<canvas id="fx">)
+    const canvas = document.getElementById('fx');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    function createFirework() {
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * (canvas.height * 0.45);
+      const colors = ['#D4AF37', '#FDE68A', '#FFFFFF', '#93C5FD'];
+      for (let i = 0; i < 30; i++) {
+        const angle = (Math.PI * 2 * i) / 30;
+        const speed = Math.random() * 2.5 + 1;
+        particles.push({
+          x, y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          alpha: 1,
+          color: colors[Math.floor(Math.random() * colors.length)]
+        });
+      }
+    }
+
+    function loop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p, idx) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.03;
+        p.alpha -= 0.015;
+        ctx.globalAlpha = Math.max(p.alpha, 0);
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        ctx.fill();
+        if (p.alpha <= 0) particles.splice(idx, 1);
+      });
+      requestAnimationFrame(loop);
+    }
+
+    createFirework();
+    setTimeout(createFirework, 700);
+    setInterval(createFirework, 3500);
+    loop();
+
+    // 5. Bật/tắt nhạc nền
+    const music = document.getElementById('bg-music');
+    const musicBtn = document.getElementById('music-btn');
+    let isPlaying = false;
+
+    function toggleMusic() {
+      if (isPlaying) {
+        music.pause();
+        musicBtn.classList.remove('spin-music');
+        musicBtn.innerText = '🔇';
+      } else {
+        music.play();
+        musicBtn.classList.add('spin-music');
+        musicBtn.innerText = '🎵';
+      }
+      isPlaying = !isPlaying;
+    }
+
+    // 6. Submit form RSVP lên Google Sheets
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbywY9dv2gEc_Pn_b03hOI4KUO5z0j47XgCO0qMPvkUXJPpaDdbTXdrqQemL4a6LedQH/exec';
+    const rsvpForm = document.getElementById('rsvp-form');
+    const submitBtn = document.getElementById('rsvp-submit-btn');
+
+    rsvpForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Đang gửi tín hiệu...';
+
+      fetch(SCRIPT_URL, { method: 'POST', body: new FormData(rsvpForm) })
+        .then(response => {
+          rsvpForm.classList.add('hidden');
+          document.getElementById('rsvp-success').classList.remove('hidden');
+        })
+        .catch(error => {
+          alert('Có lỗi kết nối, bạn thử bấm gửi lại nhé!');
+          submitBtn.disabled = false;
+          submitBtn.innerText = 'Gửi Tín Hiệu & Lời Chúc';
+        });
+    });
+  </script>
+</body>
+</html>
